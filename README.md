@@ -56,4 +56,24 @@ type nul > README.md
         - IDE: VS Code / Android Studio
         - Linguagem: Dart
         - Ambientes: Mac, Win e Linux
-        
+
+    ## Preparação do Ambiente de Desenvolvimento    
+
+    ## Instalação do FLutterSDK
+    - Download do arquivo ZIP na página flutter.dev
+    - Inclusão do flutter na pasta C:\src
+    - Inclusão do flutter\bin nas variáveis de ambiente
+    - Teste o flutter --version
+
+    ### Instalação do AndroidSDK
+    - Download do AndroidSDK - Command Line Tools
+    - Adicionar o Command-Line ao C:\src\AndroidSDK
+    - Adicionar o SDKManager as Variáveis de Ambiente
+    - Download dos pacotes:
+        - emulator
+        - platforms
+        - platform-tools
+        - build-tools
+    - Adicionar ADB e o Emulator as Variáveis de Ambiente
+    - Criação da Imagem do Emulador
+    - Build do Emulador - via SDKManager
