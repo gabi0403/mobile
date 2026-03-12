@@ -77,3 +77,34 @@ type nul > README.md
     - Adicionar ADB e o Emulator as Variáveis de Ambiente
     - Criação da Imagem do Emulador
     - Build do Emulador - via SDKManager
+
+    ### Criação de Projeto e Códigos da Linha de Comando
+
+    - Criação de Pojetos
+        - flutter create nome_do_app
+            - Flags:
+                - --empt: cria um aplicativo "vazio"(hello world)
+                - --platforms: permite a seleção de uma plataforma de desenvolvimento
+                    - Exemplo: --platforms=android (a criação do projeto será somente para a plataforma android)
+        - exemplo de criação de um aplicativo android vazio
+            - flutter create nome_do_app --empty --platforms=android
+            - obs: nome do aplicativo: todas as letras minúsculas, separação de palavras com "_";
+            - permite correção de pequenos problemas no flutter e idenificação dos parâmetros
+            funcionais em relação as plataformas de desenvolvimento
+            - sempre rodar o flutter doctor no começo do desenvolvimento
+        - flutter clean
+            - limpa cache do build (apaga o apk anterior)
+        - flutter run -v
+            - build do app (apk)
+    - Gerenciamento de dependências do PubSpec()
+        - Instalação
+            - flutter pub add nome_dependencia
+        - baixar e instalar dependências projetadas
+            - flutter pub get
+        - Outros comandos do flutter pub(dependências)
+            - flutter pub outdated (verifica se as dependências estão desatualizadas)
+            - flutter pub upgrade (atualiza as dependências do flutter pub)
+
+
+             
+    
