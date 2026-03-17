@@ -95,7 +95,7 @@ class PerfilPage extends StatelessWidget {
 
             const SizedBox(height: 20),
 
-            /// FOTO
+            // foto
             const CircleAvatar(
               radius: 60,
               backgroundColor: Colors.grey,
@@ -103,7 +103,7 @@ class PerfilPage extends StatelessWidget {
 
             const SizedBox(height: 15),
 
-            /// NOME
+            // nome
             const Text(
               "Nome",
               style: TextStyle(
@@ -116,7 +116,7 @@ class PerfilPage extends StatelessWidget {
 
             const SizedBox(height: 20),
 
-            /// CARDS
+            // cards
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -128,7 +128,7 @@ class PerfilPage extends StatelessWidget {
 
             const SizedBox(height: 20),
 
-            /// REDES SOCIAIS
+            // redes sociais
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -140,13 +140,13 @@ class PerfilPage extends StatelessWidget {
 
             const SizedBox(height: 20),
 
-            /// INFORMAÇÕES
+            // informações
             profileInfo(),
           ],
         ),
       ),
 
-      /// MENU INFERIOR
+      // footer
       bottomNavigationBar: BottomNavigationBar(
         items: const [
           BottomNavigationBarItem(
