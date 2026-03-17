@@ -146,7 +146,11 @@ class PerfilPage extends StatelessWidget {
         ),
       ),
 
+<<<<<<< HEAD
       // footer
+=======
+      // navBar
+>>>>>>> 258bbef45010787c12281a7b0aae59fce538c4af
       bottomNavigationBar: BottomNavigationBar(
         items: const [
           BottomNavigationBarItem(
