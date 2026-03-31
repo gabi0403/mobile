@@ -1,4 +1,4 @@
-//função principal ( faz o aplicativo rodar)
+//função principal que faz o aplicativo rodar
 import 'package:flutter/material.dart';
 
 void main(List<String> args) {
@@ -12,8 +12,8 @@ void main(List<String> args) {
 
 //st -> snipets (atalhos para código)
 
-//janela do aplicativvo
-//1º Class identifica a mudança de estado => chama o build
+//janela do aplicativo
+//1° Class identifica a mudança de estado -> chama o build
 class ToDoList extends StatefulWidget {
   const ToDoList({super.key});
 
@@ -21,15 +21,15 @@ class ToDoList extends StatefulWidget {
   State<ToDoList> createState() => _ToDoListState();
 }
 
-//2º class => lógica da construção da janela
+//2° class -> lógica da construção da janela
 class _ToDoListState extends State<ToDoList> {
   //atributos
-  //final => permite a mudança de valor uma única vez (escopo da variável)
-  // _ o uso do underLine , transforma a variável em private
+  //final -> permite a mudança de valor uma única vez (escopo da variável)
+  // o uso do underLine _  transforma a variável em private
   final TextEditingController _tarefaController =
       TextEditingController(); //pega o valor do input
   final List<Map<String, dynamic>> _tarefas =
-      []; // Lista do Tipo Coleção (Chave, Valor)
+      []; // Lista do tipo coleção (chave, valor)
 
   //métodos
   @override
@@ -58,16 +58,16 @@ class _ToDoListState extends State<ToDoList> {
             ),
             //campo para listar as tarefas
             Expanded(
-              //Listar as Tarefas da Coleção
+              //listar as tarefas da coleção
               child: ListView.builder(
-                itemCount: _tarefas.length, //conta o nº de item na lista
+                itemCount: _tarefas.length, //conta o n° de item na lista
                 itemBuilder: (context, index) =>
                     //exibe o elemento da Lista
                     ListTile(
                       title: Text(
                         _tarefas[index]["titulo"],
                         style: TextStyle(
-                          //operador Ternário (if,else) => se tarefa concluida , coloca um risco no texto
+                          //operador ternário (if,else) -> se tarefa concluida , coloca um risco no texto
                           decoration: _tarefas[index]["concluida"]
                               ? TextDecoration.lineThrough
                               : null,
@@ -82,7 +82,7 @@ class _ToDoListState extends State<ToDoList> {
                         }),
                       ),
                       // coloca um icone de lixeira, ao ser clicado vai deletar a tarefa
-                      //usar o trailing para colocar o icone da lixeira
+                      //usa o trailing para colocar o icone da lixeira
                       trailing: ElevatedButton(
                         onPressed: () => _deletarTarefa,
                         child: Icon(Icons.delete),
@@ -110,8 +110,10 @@ class _ToDoListState extends State<ToDoList> {
   }
 
   void _deletarTarefa(int index) {
+    if(_tarefas[index]["concluida"]){
     setState(() {
       _tarefas.removeAt(index);
     });
+  }
   }
 }
