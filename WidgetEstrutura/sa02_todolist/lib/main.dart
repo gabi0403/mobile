@@ -1,4 +1,4 @@
-//função principal que faz o aplicativo rodar
+//Função principal que faz o aplicativo rodar
 import 'package:flutter/material.dart';
 
 void main(List<String> args) {
@@ -36,7 +36,7 @@ class _ToDoListState extends State<ToDoList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Lista de Tarefas"),
+        title: Text("Lista de Tarefas 2.0"),
         centerTitle: true,
       ), //centraliza o texto no meio da Appbar
       body: Padding(
@@ -54,7 +54,7 @@ class _ToDoListState extends State<ToDoList> {
             ElevatedButton(
               // botão para adicioanr tarefa
               onPressed: _adicionarTarefa,
-              child: Text("Adicioanr Tarefa"),
+              child: Text("Adicionar Tarefa"),
             ),
             //campo para listar as tarefas
             Expanded(
