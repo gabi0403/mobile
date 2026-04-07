@@ -11,7 +11,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Meu Aplciativo Interativo"),),
+      appBar: AppBar(title: Text("Meu Aplicativo Interativo"),),
       body: Padding(
         padding: EdgeInsets.all(8),
         child: Center(
@@ -20,7 +20,7 @@ class HomePage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               //logo do aplicativo com atraso de carregamento de 2 segundos
-              Image.network("https://thumbs.dreamstime.com/b/logotipo-cl%C3%A1ssico-do-batman-isolado-em-fundo-branco-dia-bolonha-it%C3%A1lia-de-setembro-404052715.jpg",
+              Image.network("https://i.pinimg.com/564x/33/0f/ff/330fffb3d3422820dc3b3591e5a90804.jpg",
               width: 150,
               height: 150,),
               //bloco de espaçamento entre objetos
