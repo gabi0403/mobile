@@ -1,3 +1,4 @@
+Link Figma: https://www.figma.com/design/nfVFxxuWmunu37Gf2KFKiy/Sem-t%C3%ADtulo?node-id=3-348&t=snVzARfXP8BBtZpx-0 
 
 # EcoTrack: Controle de Hábitos Sustentáveis
 **Especificações dos Requisitos de Software (SRE)** *Estrutura Baseada na ISO/IEC/IEEE 29148:2018*
