@@ -19,7 +19,7 @@ class DatabaseHelper {
 
   //método get da conexão
   Future<Database> get database async {
-    if (_database != null) return _database!;
+    if (_database != null) return _database!; //se conexão já existir retorna a conexão existente
     _database = await _initDb(); //se nao existir inicia uma nova
     return _database!;
   }
@@ -50,7 +50,8 @@ class DatabaseHelper {
       ), //garante o delete on cascade
     );
   }
-  //métodos do CRUD simplificados
+  
+  //métodos do ApiRest simplificados
 
   //inserir pet
   Future<int> insertPet(Pet pet) async => (await database).insert("pets", pet.toMap());
