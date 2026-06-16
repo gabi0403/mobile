@@ -9,7 +9,7 @@ O **EstoqueMais** foi projetado para atender microempreendedores que necessitam 
 
 ---
 
-## 2. Especificação de Requisitos (Padrão ISO 29148:2018)
+## 2. Especificação de Requisitos
 
 ### 2.1. Requisitos Funcionais (RF)
 Os requisitos funcionais descrevem as ações fundamentais que o sistema deve ser capaz de executar.
