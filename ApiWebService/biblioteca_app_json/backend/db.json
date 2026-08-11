@@ -1,43 +1,79 @@
 {
-    "users":[
-          {
-      "id": 1,
-      "name": "Maria Silva",
-      "email": "marai@email.com"
+  "users": [
+    {
+      "name": "Evelyn",
+      "email": "evelyn@email.com",
+      "id": "JxkrZXDWtl4"
     },
     {
-      "id": 2,
-      "name": "João Silva",
-      "email": "joao@email.com"
+      "name": "Ana Sofhia",
+      "email": "anas@email.com",
+      "id": "bxBm09xGRvk"
     },
     {
-      "id": "1234",
-      "name": "Pedro Cardoso",
-      "email": "pedro@email.com"
+      "name": "Emily",
+      "email": "emily@email.com",
+      "id": "R2jiyEB6prg"
+    },
+    {
+      "name": "Thayssa",
+      "email": "thayssa@email.com",
+      "id": "zS0v9iWaP5w"
+    },
+    {
+      "name": "Vitor",
+      "email": "vitor@email.com",
+      "id": "PDocHSvECzc"
+    },
+    {
+      "name": "Bárbara",
+      "email": "barbara@email.com",
+      "id": "ijA-yUMQ9hI"
+    },
+    {
+      "name": "Lucas",
+      "email": "lucas@email.com",
+      "id": "bMkgF4aEewk"
     }
-    ],
-    "books":[
-        {
-            "id": "1",
-            "title": "Dom Casmurro",
-            "author": "Machado de Assis",
-            "avaliable": true
-        },
-        {
-            "id": "2",
-            "title": "O Cortiço",
-            "author": "Aluísio Azevedo",
-            "avaliable": true
-        }
-    ],
-    "loans":[
-        {
-            "id":"1",
-            "userId":"1",
-            "bookId":"1",
-            "loanDate":"2023-06-01",
-            "returnDate":"2023-06-15",
-            "returned": true
-        }
-    ]
+  ],
+  "books": [
+    {
+      "id": "1",
+      "title": "Dom Casmurro",
+      "author": "Machado de Assis",
+      "avaliable": true
+    },
+    {
+      "id": "2",
+      "title": "O Cortiço",
+      "author": "Aluísio Azevedo",
+      "avaliable": true
+    },
+    {
+      "id": "3",
+      "title": "The Witcher",
+      "author": "Andrzej Sapkowski",
+      "avaliable": true
+    }
+
+  ],
+  "loans": [
+    {
+      "id": "1",
+      "userId": null,
+      "bookId": "1",
+      "loanDate": "2023-06-01",
+      "returnDate": "2023-06-15",
+      "returned": true
+    },
+    {
+        "id": "2",
+      "userId": null,
+      "bookId": "3",
+      "loanDate": "2023-06-01",
+      "returnDate": "2023-06-15",
+      "returned": true
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }
