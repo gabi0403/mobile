@@ -16,7 +16,7 @@ class UserController {
 
   //criar
   Future<UserModel> create(UserModel u) async {
-    final created = await ApiService.post("user", u.toMap());
+    final created = await ApiService.post("users", u.toMap());
     //add um usuario e retorna o usuario criado -> ID
     return UserModel.fromMap(created);
   }
@@ -30,6 +30,6 @@ class UserController {
 
   //deletar
   Future<void> delete(String id) async {
-    await ApiService.delete("user", id);// se nao der certo gera uma exception
+    await ApiService.delete("users", id);// se nao der certo gera uma exception
   }
 }

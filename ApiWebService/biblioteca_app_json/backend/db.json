@@ -6,9 +6,9 @@
       "id": "JxkrZXDWtl4"
     },
     {
+      "id": "bxBm09xGRvk",
       "name": "Ana Sofhia",
-      "email": "anas@email.com",
-      "id": "bxBm09xGRvk"
+      "email": "ana@email.com"
     },
     {
       "name": "Emily",
@@ -41,7 +41,7 @@
       "id": "1",
       "title": "Dom Casmurro",
       "author": "Machado de Assis",
-      "avaliable": true
+      "avaliable": false
     },
     {
       "id": "2",
@@ -55,7 +55,6 @@
       "author": "Andrzej Sapkowski",
       "avaliable": true
     }
-
   ],
   "loans": [
     {
@@ -67,7 +66,7 @@
       "returned": true
     },
     {
-        "id": "2",
+      "id": "2",
       "userId": null,
       "bookId": "3",
       "loanDate": "2023-06-01",
