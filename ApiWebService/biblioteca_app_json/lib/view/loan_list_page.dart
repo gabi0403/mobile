@@ -44,11 +44,11 @@ class _LoanListPageState extends State<LoanListPage> {
             itemBuilder: (ctx, index) {
               final loan = loans[index];
               return ListTile(
-                title: Text('Usuário: ${loan.user.name}'),
+                title: Text('Usuário: ${loan.user?.name ?? 'Usuário não informado'}'),
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Livro: ${loan.book.title}'),
+                    Text('Livro: ${loan.book?.title ?? 'Livro não informado'}'),
                     Text('De: ${_formatDate(loan.startDate)}'),
                     Text('Até: ${_formatDate(loan.dueDate)}'),
                     Text('Status: ${loan.returned ? "Devolvido" : "Ativo"}'),
