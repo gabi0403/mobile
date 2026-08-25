@@ -88,8 +88,8 @@ A tabela de favoritos é associada ao ID único do perfil do usuário:
 1. **Clonar o repositório:**
 
 ```bash
-git clone https://github.com/seu-usuario/cine_favorite.git
-cd cine_favorite
+git clone https://github.com/seu-usuario/cine_favorite_api.git
+cd cine_favorite_api
 ```
 
 2. **Instalar as dependências:**
@@ -100,7 +100,7 @@ flutter pub get
 
 3. **Configurar a chave da API do TMDB:**
 
-   Abra o arquivo `lib/services/api_config.dart` e insira sua chave:
+   Abra o arquivo `lib/config/api_config.dart` e insira sua chave:
 
 ```dart
 class ApiConfig {
