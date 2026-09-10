@@ -15,13 +15,26 @@ class Tarefa {
   // }
 
   //construtor resumido
-  Tarefa({
-    required this.titulo,
-    this.concluida = false,
-    DateTime? dataCriacao,}) : dataCriacao = dataCriacao ?? DateTime.now();
-    //se data de criação for nulo, atribui uma data DateTime.now() -> pega a data atual
+  Tarefa({required this.titulo, this.concluida = false, DateTime? dataCriacao})
+    : dataCriacao = dataCriacao ?? DateTime.now();
+  //se data de criação for nulo, atribui uma data DateTime.now() -> pega a data atual
+
+  Map<String, dynamic> toJson() {
+    return {
+      'titulo': titulo,
+      'concluida': concluida,
+      'dataCriacao': dataCriacao.toIso8601String(),
+    };
+  }
+
+  factory Tarefa.fromJson(Map<String, dynamic> json) {
+    return Tarefa(
+      titulo: json['titulo'] as String,
+      concluida: json['concluida'] as bool? ?? false,
+      dataCriacao: DateTime.tryParse(json['dataCriacao'] as String? ?? ''),
+    );
+  }
 
   //classe de modelage de dados, toda tarefa criada é um obj da classe Tarefa
   //toda tarefa tem um titulo, um status de conclusão e uma data de criação
-
 }
