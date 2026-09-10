@@ -2,11 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
 void main(List<String> args) {
-  runApp(MaterialApp(
-    home: MyApp(),
-  ));
+  runApp(MaterialApp(home: MyApp()));
 }
-
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -16,44 +13,51 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String mensagem = "Localização não Obtida";
+  String mensagem = "Localização Não Obtida";
 
-  void getLocation() async{
-    //Solicitar geolocalização ao apertar o botão
+  void getLocation() async {
+    // Solicitar a geolocalização ao apertar o botão
     bool enable;
     LocationPermission permission;
 
-    enable = await Geolocator. isLocationServiceEnabled();
-    // Se a permissão não estiver habilitada
-    if(!enable){
-      mensagem = "Serviço de Localização desabilitado";
+    enable = await Geolocator.isLocationServiceEnabled();
+
+    if (!enable) {
+      mensagem = "Serviço de Localização Desabilitado";
     }
 
     permission = await Geolocator.checkPermission();
-    if(permission == LocationPermission.denied){
-      permission = await Geolocator.requestPermission(); // vou solicitar a permissão
-      if(permission == LocationPermission.denied){
-        mensagem = "Acesso a localização não permitido pelo usuário";
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        mensagem = "Acesso a Localização Não Permitido Pelo Usuário";
       }
-    //permissão liberada=
-    }    
-    //pegando a posição atual
-    Position position = await Geolocator.getCurrentPosition();
-    mensagem = "Latitude ${position.latitude}, Longitude: ${position.longitude}";
-  }
+    }
 
+    // Pegando a posição atual
+    Position position = await Geolocator.getCurrentPosition();
+    mensagem =
+        "Latitude: ${position.latitude}, Longitude: ${position.longitude}";
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // utilizar a geolocalização para mostrar a localização do dispositivo
-      appBar: AppBar(title: Text("GPS - Localização"),),
+      // Utilizar a geolocalização para mostrar a localização do dispositivo
+      appBar: AppBar(title: Text("GPS - Localização")),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(mensagem),
-            ElevatedButton(onPressed: getLocation, child: Text("Obter localização"))
+            ElevatedButton(
+              onPressed: () async {
+                setState(() {
+                  getLocation();
+                });
+              },
+              child: Text("Obter Localização"))
           ],
         ),
       ),

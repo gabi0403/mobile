@@ -18,8 +18,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String mensagem = "teste";
-  String clima = "teste";
+  String mensagem = "";
+  String clima = "";
   late Position position; 
 
   final ApiService apiService = ApiService();
@@ -65,7 +65,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     setState(() {
       getLocation();
