@@ -73,6 +73,16 @@ class DatabaseHelper {
 
   Future<void> save(Record record) async =>
       (await db).insert('registros', record.toMap());
+
+  Future<void> update(Record record) async => (await db).update(
+    'registros',
+    record.toMap(),
+    where: 'id = ?',
+    whereArgs: [record.id],
+  );
+
+  Future<void> delete(int id) async =>
+      (await db).delete('registros', where: 'id = ?', whereArgs: [id]);
 }
 
 class App extends StatelessWidget {
@@ -125,11 +135,11 @@ class _HomePageState extends State<HomePage> {
   Future<void> newRecord() async {
     final saved = await Navigator.push<bool>(
       context,
-      MaterialPageRoute(builder: (_) => NewPage(database)),
+      MaterialPageRoute(builder: (_) => NewPage(database: database)),
     );
     if (saved == true) {
       await load();
-      await SystemSound.play(SystemSoundType.click);
+      await SystemSound.play(SystemSoundType.alert);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Registro salvo com sucesso!')),
@@ -193,10 +203,15 @@ class _HomePageState extends State<HomePage> {
                     overflow: TextOverflow.ellipsis,
                   ),
                   isThreeLine: true,
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => DetailsPage(record)),
-                  ),
+                  onTap: () async {
+                    final changed = await Navigator.push<bool>(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => DetailsPage(record, database),
+                      ),
+                    );
+                    if (changed == true) load();
+                  },
                 ),
               );
             },
@@ -205,8 +220,9 @@ class _HomePageState extends State<HomePage> {
 }
 
 class NewPage extends StatefulWidget {
-  const NewPage(this.database, {super.key});
+  const NewPage({required this.database, this.record, super.key});
   final DatabaseHelper database;
+  final Record? record;
   @override
   State<NewPage> createState() => _NewPageState();
 }
@@ -215,8 +231,21 @@ class _NewPageState extends State<NewPage> {
   final note = TextEditingController();
   final picker = ImagePicker();
   XFile? photo;
-  Position? position;
+  double? latitude;
+  double? longitude;
   bool busy = false;
+
+  @override
+  void initState() {
+    super.initState();
+    final record = widget.record;
+    if (record != null) {
+      note.text = record.note;
+      photo = record.photo == null ? null : XFile(record.photo!);
+      latitude = record.lat;
+      longitude = record.lng;
+    }
+  }
 
   @override
   void dispose() {
@@ -260,12 +289,15 @@ class _NewPageState extends State<NewPage> {
           permission == LocationPermission.deniedForever) {
         throw Exception('Localização negada.');
       }
-      position = await Geolocator.getCurrentPosition(
+      final position = await Geolocator.getCurrentPosition(
         locationSettings: const LocationSettings(
           accuracy: LocationAccuracy.high,
         ),
       );
-      setState(() {});
+      setState(() {
+        latitude = position.latitude;
+        longitude = position.longitude;
+      });
     } catch (error) {
       message(error.toString().replaceFirst('Exception: ', ''));
     }
@@ -273,7 +305,7 @@ class _NewPageState extends State<NewPage> {
   }
 
   Future<void> save() async {
-    if (photo == null || position == null) {
+    if (photo == null || latitude == null || longitude == null) {
       message('Tire a foto e obtenha a localização antes de salvar.');
       return;
     }
@@ -285,15 +317,19 @@ class _NewPageState extends State<NewPage> {
     final file = await File(photo!.path).copy(
       '${folder.path}/registro_${DateTime.now().millisecondsSinceEpoch}.jpg',
     );
-    await widget.database.save(
-      Record(
-        date: DateTime.now(),
-        lat: position!.latitude,
-        lng: position!.longitude,
-        note: note.text.trim(),
-        photo: file.path,
-      ),
+    final record = Record(
+      id: widget.record?.id,
+      date: widget.record?.date ?? DateTime.now(),
+      lat: latitude!,
+      lng: longitude!,
+      note: note.text.trim(),
+      photo: file.path,
     );
+    if (widget.record == null) {
+      await widget.database.save(record);
+    } else {
+      await widget.database.update(record);
+    }
     if (mounted) Navigator.pop(context, true);
   }
 
@@ -325,9 +361,9 @@ class _NewPageState extends State<NewPage> {
           onPressed: busy ? null : getLocation,
           icon: const Icon(Icons.location_on),
           label: Text(
-            position == null
+            latitude == null || longitude == null
                 ? 'Obter localização GPS'
-                : '${position!.latitude}, ${position!.longitude}',
+                : '$latitude, $longitude',
           ),
         ),
         const SizedBox(height: 16),
@@ -351,14 +387,63 @@ class _NewPageState extends State<NewPage> {
 }
 
 class DetailsPage extends StatelessWidget {
-  const DetailsPage(this.record, {super.key});
+  const DetailsPage(this.record, this.database, {super.key});
   final Record record;
+  final DatabaseHelper database;
+
+  Future<void> edit(BuildContext context) async {
+    final changed = await Navigator.push<bool>(
+      context,
+      MaterialPageRoute(
+        builder: (_) => NewPage(database: database, record: record),
+      ),
+    );
+    if (changed == true && context.mounted) Navigator.pop(context, true);
+  }
+
+  Future<void> remove(BuildContext context) async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('Excluir registro?'),
+        content: const Text('Esta ação não pode ser desfeita.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancelar'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Excluir'),
+          ),
+        ],
+      ),
+    );
+    if (confirm == true && record.id != null) {
+      await database.delete(record.id!);
+      if (context.mounted) Navigator.pop(context, true);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final image = record.photo == null ? null : File(record.photo!);
     return Scaffold(
-      appBar: AppBar(title: const Text('Detalhes')),
+      appBar: AppBar(
+        title: const Text('Detalhes'),
+        actions: [
+          IconButton(
+            onPressed: () => edit(context),
+            icon: const Icon(Icons.edit),
+            tooltip: 'Editar',
+          ),
+          IconButton(
+            onPressed: () => remove(context),
+            icon: const Icon(Icons.delete),
+            tooltip: 'Excluir',
+          ),
+        ],
+      ),
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
