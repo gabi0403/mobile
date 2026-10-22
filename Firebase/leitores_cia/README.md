@@ -223,12 +223,19 @@ Relação entre requisitos de negócio, requisitos do sistema e seus critérios 
 - **Conexão ao Firebase Confirmada:**
   - Arquivo `firebase.json` presente.
   - Arquivo `lib/firebase_options.dart` gerado pelo FlutterFire CLI com configurações para a plataforma **Android**, associado ao projeto `leitores-cia`.
+- **Etapa 5 — Cloud Functions e regras locais:** A função `recalculateReadingStats` e as regras de segurança estão implementadas localmente. A função usa Firebase Admin SDK e recalcula o resumo de `users/{userId}/stats/summary` a cada gravação, alteração ou exclusão de livro.
 
 ### 11.2. Configurações que Ainda Serão Necessárias
-- **Inicialização do Firebase:** Inserir a chamada `WidgetsFlutterBinding.ensureInitialized()` e `Firebase.initializeApp(...)` no método `main()` em `lib/main.dart`.
-- **Dependência para Requisições HTTP:** Adicionar pacote cliente HTTP (ex.: `http` ou `dio`) no `pubspec.yaml` para viabilizar as chamadas à Google Books API.
-- **Ambiente de Cloud Functions:** Inicializar o diretório de funções (`firebase init functions`), implementar a lógica de recálculo dos totais dos livros em `"LIDOS"` acionada por `onWrite` e realizar o deploy no projeto Firebase.
-- **Regras de Segurança do Firestore:** Definir e publicar as regras declarativas em `firestore.rules` (ou console Firebase) restringindo leituras e gravações por `request.auth.uid`, com bloqueio explícito de escrita cliente no documento `stats/summary` (`allow write: if false;`).
+- **Busca e estante:** A busca pela Google Books API, exibição dos metadados disponíveis e inclusão na estante do usuário autenticado estão implementadas. O serviço verifica livros já existentes pelo Google Books ID.
+- **Publicação da Etapa 5:** Ainda é necessário confirmar no console Firebase que o Cloud Firestore está habilitado e que o projeto atende aos requisitos de faturamento do Cloud Functions. O repositório não contém `.firebaserc`; por isso, os comandos abaixo informam explicitamente o project ID já presente nas configurações do Firebase. Nenhum deploy foi realizado nesta etapa.
+  ```bash
+  cd functions
+  npm install
+  npm test
+  cd ..
+  firebase deploy --only functions --project leitores-cia
+  firebase deploy --only firestore:rules --project leitores-cia
+  ```
 - **Execução do Aplicativo:**
   ```bash
   # Obtenção de dependências
@@ -248,10 +255,10 @@ A tabela a seguir consolida o diagnóstico técnico dos componentes do projeto:
 | :--- | :--- | :--- |
 | **Projeto Flutter Base** | Configurado | Estrutura de pastas padrão criada com `pubspec.yaml` e `main.dart` inicial. |
 | **Conexão Cloud Firestore** | Conectado (Configuração inicial) | Pacotes do Firebase e arquivo `firebase_options.dart` configurados para Android com o projeto `leitores-cia`. |
-| **Inicialização no Código Dart** | Pendente de implementação | O arquivo `lib/main.dart` ainda exibe o modelo básico e não executa `Firebase.initializeApp()`. |
-| **Telas e Interface do Usuário** | Planejado | Telas de login, cadastro, busca, estante e painel de estatísticas ainda não foram implementadas. |
-| **Integração Google Books API** | Planejado | Não integrada; depende de implementação de serviço de busca e inclusão de biblioteca HTTP. |
-| **Firebase Authentication** | Planejado | Dependência presente no `pubspec.yaml`, mas lógica de telas e controladores de autenticação/logout não implementada. |
-| **Cloud Functions** | Planejado | Nenhuma função foi criada ou implantada no projeto até o momento; estratégia de recálculo determinístico definida no planejamento. |
-| **Regras do Firestore** | Planejado | Regras restritivas de produção (incluindo bloqueio de escrita do cliente em estatísticas) ainda precisam ser redigidas e implantadas. |
-| **Testes de Integração e Execução** | A testar | Necessário validar a execução do app em dispositivo físico ou emulador Android e verificar a comunicação efetiva com o Firestore. |
+| **Inicialização no Código Dart** | Implementada | O Firebase é inicializado em `lib/main.dart` com as opções geradas pelo FlutterFire CLI. |
+| **Telas e Interface do Usuário** | Parcialmente implementadas | Cadastro, login, estante e busca estão implementados; a tela de estatísticas permanece pendente. |
+| **Integração Google Books API** | Implementada | Pesquisa por título ou autor, exibição dos metadados disponíveis e adição à estante do usuário autenticado. |
+| **Firebase Authentication** | Implementada | Cadastro, login, logout e persistência da sessão estão conectados ao Firebase Authentication. |
+| **Cloud Functions** | Implementada localmente; não publicada | `functions/recalculateReadingStats` recalcula deterministicamente livros e páginas lidos com Firebase Admin SDK; a execução em produção depende do deploy. |
+| **Regras do Firestore** | Implementadas localmente; não publicadas | `firestore.rules` restringe acesso aos dados do usuário autenticado e bloqueia gravações cliente em `stats`. A publicação depende do deploy. |
+| **Testes e execução Android** | Em validação | Testes unitários e de widget cobrem as funcionalidades implementadas; a execução em dispositivo/emulador ainda requer validação. |
