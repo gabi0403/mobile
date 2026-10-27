@@ -42,6 +42,21 @@ class BookService {
     });
   }
 
+  /// Escuta o resumo de estatísticas calculado pela Cloud Function.
+  Stream<Map<String, dynamic>?> streamReadingStats(String userId) {
+    if (userId.isEmpty) {
+      throw ArgumentError('O identificador do usuário (userId) não pode ser vazio.');
+    }
+
+    return _firestore
+        .collection('users')
+        .doc(userId)
+        .collection('stats')
+        .doc('summary')
+        .snapshots()
+        .map((snapshot) => snapshot.data());
+  }
+
   /// Adiciona uma nova obra à estante do usuário.
   Future<String> addBook(String userId, BookModel book) async {
     final collection = _booksRef(userId);

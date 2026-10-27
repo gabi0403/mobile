@@ -43,6 +43,8 @@ class _BookSearchScreenState extends State<BookSearchScreen> {
   }
 
   Future<void> _search() async {
+    if (_isLoading) return;
+
     final query = _queryController.text.trim();
     if (query.length < 2) {
       setState(() {
@@ -219,6 +221,11 @@ class _BookSearchScreenState extends State<BookSearchScreen> {
         title: 'Não foi possível concluir a busca',
         message: _errorMessage!,
         color: AppColors.error,
+        action: TextButton.icon(
+          onPressed: _isLoading ? null : _search,
+          icon: const Icon(Icons.refresh),
+          label: const Text('Tentar novamente'),
+        ),
       );
     }
 
@@ -273,6 +280,7 @@ class _BookSearchScreenState extends State<BookSearchScreen> {
     required String title,
     required String message,
     required Color color,
+    Widget? action,
   }) {
     final theme = Theme.of(context);
     return Center(
@@ -299,6 +307,10 @@ class _BookSearchScreenState extends State<BookSearchScreen> {
                 color: AppColors.secondary,
               ),
             ),
+            if (action != null) ...[
+              const SizedBox(height: 12),
+              action,
+            ],
           ],
         ),
       ),

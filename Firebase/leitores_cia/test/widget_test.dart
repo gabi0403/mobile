@@ -91,6 +91,7 @@ class FakeBookService implements BookService {
   bool deleteCalled = false;
   String? lastDeletedBookId;
   BookStatus? lastUpdatedStatus;
+  String? lastStatsUserId;
 
   FakeBookService({List<BookModel>? initialBooks}) {
     if (initialBooks != null) {
@@ -112,6 +113,12 @@ class FakeBookService implements BookService {
       }
       return list;
     });
+  }
+
+  @override
+  Stream<Map<String, dynamic>?> streamReadingStats(String userId) {
+    lastStatsUserId = userId;
+    return Stream.value(null);
   }
 
   @override
@@ -486,6 +493,30 @@ void main() {
       expect(find.text('Os livros cadastrados com esta estante aparecerão aqui.'), findsOneWidget);
     });
 
+    testWidgets('Navegação abre estatísticas do usuário autenticado', (tester) async {
+      final fakeAuth = FakeAuthService(
+        initialUser: FakeUser(uid: 'stats_user_123', email: 'stats@example.com'),
+      );
+      final fakeBookService = FakeBookService();
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.lightTheme,
+          home: HomeScreen(
+            authService: fakeAuth,
+            bookService: fakeBookService,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Estatísticas'));
+      await tester.pumpAndSettle();
+
+      expect(fakeBookService.lastStatsUserId, 'stats_user_123');
+      expect(find.text('Sua jornada está começando'), findsOneWidget);
+    });
+
     testWidgets('BookCard permite transição de status e exclusão com diálogo de confirmação', (tester) async {
       final fakeAuth = FakeAuthService(
         initialUser: FakeUser(uid: 'user_101', email: 'leitor@booknook.com'),
@@ -560,4 +591,3 @@ void main() {
     });
   });
 }
-

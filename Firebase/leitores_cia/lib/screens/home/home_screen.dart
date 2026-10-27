@@ -6,6 +6,7 @@ import '../../services/book_service.dart';
 import '../../services/books_api_service.dart';
 import '../../widgets/book_card.dart';
 import '../search/book_search_screen.dart';
+import '../stats/stats_screen.dart';
 
 /// Tela principal da Estante Digital (Etapa 2).
 ///
@@ -316,7 +317,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   booksApiService: _booksApiService,
                   bookService: _bookService,
                 )
-              : StreamBuilder<List<BookModel>>(
+              : _currentBottomNavIndex == 2
+                  ? StatsScreen(
+                      userId: userId,
+                      bookService: _bookService,
+                    )
+                  : StreamBuilder<List<BookModel>>(
               stream: _bookService.streamBooks(userId),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -522,18 +528,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
           onDestinationSelected: (index) {
-            if (index == 0) {
-              setState(() => _currentBottomNavIndex = 0);
-            } else if (index == 1) {
-              setState(() => _currentBottomNavIndex = 1);
-            } else if (index == 2) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('As estatísticas consolidadas serão ativadas na Etapa 4.'),
-                  duration: Duration(seconds: 2),
-                ),
-              );
-            }
+            setState(() => _currentBottomNavIndex = index);
           },
         ),
       ),
