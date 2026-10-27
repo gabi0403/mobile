@@ -42,19 +42,38 @@ class BookService {
     });
   }
 
-  /// Escuta o resumo de estatísticas calculado pela Cloud Function.
+  /// Escuta o resumo de estatísticas calculado em tempo real a partir dos livros do usuário no Firestore.
+  ///
+  /// Dispensa Cloud Functions e plano Blaze, agregando diretamente os livros com status "LIDOS"
+  /// da subcoleção users/{userId}/books:
+  /// - RN-02: Apenas livros com status "Lidos" são computados.
+  /// - RN-03: Livros sem páginas válidas computam 1 livro e 0 páginas adicionais.
+  /// - RN-04: Mudanças de status ou remoções são refletidas imediatamente.
+  /// - RN-06: Isolamento multiusuário estrito por userId.
   Stream<Map<String, dynamic>?> streamReadingStats(String userId) {
     if (userId.isEmpty) {
       throw ArgumentError('O identificador do usuário (userId) não pode ser vazio.');
     }
 
-    return _firestore
-        .collection('users')
-        .doc(userId)
-        .collection('stats')
-        .doc('summary')
+    return _booksRef(userId)
+        .where('status', isEqualTo: BookStatus.lidos.firestoreValue)
         .snapshots()
-        .map((snapshot) => snapshot.data());
+        .map((snapshot) {
+      final books = snapshot.docs.map((doc) {
+        return BookModel.fromMap(doc.data(), id: doc.id);
+      }).toList();
+
+      final totalBooksRead = books.length;
+      final totalPagesRead = books.fold<int>(
+        0,
+        (total, book) => total + book.safePageCount,
+      );
+
+      return {
+        'totalBooksRead': totalBooksRead,
+        'totalPagesRead': totalPagesRead,
+      };
+    });
   }
 
   /// Adiciona uma nova obra à estante do usuário.

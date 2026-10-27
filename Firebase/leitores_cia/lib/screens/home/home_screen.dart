@@ -46,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     _authService = widget.authService ?? AuthService();
     _bookService = widget.bookService ?? BookService();
-    _booksApiService = widget.booksApiService ?? GoogleBooksApiService();
+    _booksApiService = widget.booksApiService ?? OpenLibraryApiService();
   }
 
   void _showLogoutDialog(BuildContext context) {

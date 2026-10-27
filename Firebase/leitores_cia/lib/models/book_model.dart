@@ -35,6 +35,7 @@ class BookModel {
   final List<String> authors;
   final int pageCount;
   final String thumbnailUrl;
+  final int? publishYear;
   final BookStatus status;
   final DateTime addedAt;
   final DateTime? updatedAt;
@@ -46,10 +47,14 @@ class BookModel {
     this.authors = const [],
     this.pageCount = 0,
     this.thumbnailUrl = '',
+    this.publishYear,
     this.status = BookStatus.queroLer,
     required this.addedAt,
     this.updatedAt,
   });
+
+  /// Identificador da obra no catálogo externo (Open Library / referência).
+  String get openLibraryId => googleBooksId;
 
   /// Retorna os autores formatados para exibição textual.
   String get authorsDisplay {
@@ -98,6 +103,17 @@ class BookModel {
       parsedAuthors = rawAuthors.map((e) => e.toString()).toList();
     }
 
+    // Tratamento de ano de publicação
+    int? parsedPublishYear;
+    final rawPublishYear = map['publishYear'];
+    if (rawPublishYear is int) {
+      parsedPublishYear = rawPublishYear;
+    } else if (rawPublishYear is num) {
+      parsedPublishYear = rawPublishYear.toInt();
+    } else if (rawPublishYear is String) {
+      parsedPublishYear = int.tryParse(rawPublishYear);
+    }
+
     return BookModel(
       id: id.isNotEmpty ? id : (map['id']?.toString() ?? ''),
       googleBooksId: map['googleBooksId']?.toString() ?? '',
@@ -105,6 +121,7 @@ class BookModel {
       authors: parsedAuthors,
       pageCount: parsedPageCount,
       thumbnailUrl: map['thumbnailUrl']?.toString() ?? '',
+      publishYear: parsedPublishYear,
       status: BookStatus.fromString(map['status']?.toString()),
       addedAt: parsedAddedAt,
       updatedAt: parsedUpdatedAt,
@@ -119,6 +136,7 @@ class BookModel {
     List<String>? authors,
     int? pageCount,
     String? thumbnailUrl,
+    int? publishYear,
     BookStatus? status,
     DateTime? addedAt,
     DateTime? updatedAt,
@@ -130,6 +148,7 @@ class BookModel {
       authors: authors ?? this.authors,
       pageCount: pageCount ?? this.pageCount,
       thumbnailUrl: thumbnailUrl ?? this.thumbnailUrl,
+      publishYear: publishYear ?? this.publishYear,
       status: status ?? this.status,
       addedAt: addedAt ?? this.addedAt,
       updatedAt: updatedAt ?? this.updatedAt,
@@ -145,6 +164,7 @@ class BookModel {
       'authors': authors,
       'pageCount': safePageCount,
       'thumbnailUrl': thumbnailUrl,
+      if (publishYear != null) 'publishYear': publishYear,
       'status': status.firestoreValue,
       'addedAt': Timestamp.fromDate(addedAt),
       'updatedAt': updatedAt != null ? Timestamp.fromDate(updatedAt!) : FieldValue.serverTimestamp(),

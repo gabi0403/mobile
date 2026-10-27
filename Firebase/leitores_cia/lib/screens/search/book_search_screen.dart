@@ -133,7 +133,7 @@ class _BookSearchScreenState extends State<BookSearchScreen> {
               ),
               const SizedBox(height: 4),
               Text(
-                'Pesquise por título ou autor no catálogo Google Books.',
+                'Pesquise por título ou autor no catálogo Open Library.',
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: AppColors.secondary,
                 ),
@@ -380,9 +380,13 @@ class _BookSearchScreenState extends State<BookSearchScreen> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  book.safePageCount > 0
-                      ? '${book.safePageCount} páginas'
-                      : 'Número de páginas indisponível',
+                  [
+                    if (book.publishYear != null) 'Ano: ${book.publishYear}',
+                    if (book.safePageCount > 0)
+                      '${book.safePageCount} páginas'
+                    else
+                      'Número de páginas indisponível',
+                  ].join(' • '),
                   style: theme.textTheme.labelSmall?.copyWith(
                     color: AppColors.onSurfaceVariant,
                   ),

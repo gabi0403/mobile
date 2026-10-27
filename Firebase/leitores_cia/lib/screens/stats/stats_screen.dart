@@ -68,7 +68,7 @@ class _StatsScreenState extends State<StatsScreen> {
             icon: Icons.auto_graph,
             title: 'Sua jornada está começando',
             message:
-                'Quando a Cloud Function atualizar seu resumo, os livros e páginas lidos aparecerão aqui.',
+                'Marque seus livros como "Lidos" na estante para que suas leituras e páginas apareçam aqui.',
           );
         }
 
@@ -197,6 +197,36 @@ class _StatsScreenState extends State<StatsScreen> {
               ],
             ),
           ),
+          if (totalBooksRead == 0) ...[
+            const SizedBox(height: 16),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: AppColors.secondaryContainer.withAlpha(120),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: AppColors.surfaceContainerHigh),
+              ),
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.auto_graph,
+                    color: AppColors.tertiary,
+                    size: 24,
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      'Sua jornada está começando! Marque livros como "Lidos" na sua estante para contabilizar suas leituras e páginas.',
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: AppColors.secondary,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ],
       ),
     );

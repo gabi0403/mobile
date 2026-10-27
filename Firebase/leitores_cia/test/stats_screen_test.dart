@@ -78,7 +78,7 @@ void main() {
     expect(find.text('3'), findsNothing);
   });
 
-  testWidgets('exibe estado sem resumo quando o documento ainda não existe', (
+  testWidgets('exibe estado inicial acolhedor quando o resumo não foi carregado', (
     tester,
   ) async {
     final controller = StreamController<Map<String, dynamic>?>();
@@ -98,7 +98,35 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Sua jornada está começando'), findsOneWidget);
-    expect(find.textContaining('Cloud Function'), findsOneWidget);
+    expect(
+      find.textContaining('Marque seus livros como "Lidos"'),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets(
+      'exibe totais zerados e aviso acolhedor quando a lista de lidos está vazia', (
+    tester,
+  ) async {
+    final controller = StreamController<Map<String, dynamic>?>();
+    final service = FakeStatsBookService(controller);
+    addTearDown(controller.close);
+
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: AppTheme.lightTheme,
+        home: Scaffold(
+          body: StatsScreen(userId: 'reader-empty', bookService: service),
+        ),
+      ),
+    );
+
+    controller.add({'totalBooksRead': 0, 'totalPagesRead': 0});
+    await tester.pumpAndSettle();
+
+    expect(find.text('Jornada Literária'), findsOneWidget);
+    expect(find.text('0'), findsNWidgets(2));
+    expect(find.textContaining('Sua jornada está começando!'), findsOneWidget);
   });
 
   testWidgets('apresenta erro de leitura e ação para tentar novamente', (
